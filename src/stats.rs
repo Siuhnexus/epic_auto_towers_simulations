@@ -2,8 +2,8 @@ use std::{fmt::{Debug,Display}, ops::{Add, AddAssign, Mul, MulAssign}};
 
 #[derive(PartialEq, PartialOrd, Clone, Copy)]
 pub struct Stats {
-    attack: f64,
-    life: f64
+    pub attack: f64,
+    pub life: f64
 }
 impl Stats {
     pub fn new(attack: f64, life: f64) -> Stats {

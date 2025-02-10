@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use dyn_clone::DynClone;
 
-use crate::{buffs::Buffs, stats::Stats};
+use crate::{board::Board, buffs::Buffs, stats::Stats};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Tower {
     pub stats: Stats,
     pub exp: u32,
@@ -33,14 +33,12 @@ impl Tower {
     }
 }
 
-pub type Board<'a> = [Option<Tower>; 15];
-
-pub trait TowerType: DynClone {
+pub trait TowerType: DynClone + std::fmt::Debug {
     fn base_stats(&self) -> Stats;
-    fn init(self, towers: &mut Board, index: usize);
-    fn round_start(self, towers: &mut Board, index: usize);
-    fn round_end(self, towers:&mut Board, index: usize);
-    fn round_end_self_destruct(self, towers: Board, index: usize);
-    fn use_ability(self, towers: &mut Board, index: usize, on: usize);
+    fn init(&self, board: &mut Board, index: usize);
+    fn round_start(&self, board: &mut Board, index: usize);
+    fn round_end(&self, board: &mut Board, index: usize);
+    fn round_end_self_destruct(&self, board: &mut Board, index: usize);
+    fn use_ability(&self, board: &mut Board, index: usize, on: usize);
 }
 dyn_clone::clone_trait_object!(TowerType);
