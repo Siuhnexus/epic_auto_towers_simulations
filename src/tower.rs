@@ -24,7 +24,7 @@ impl Tower {
 
     pub fn add_exp(&mut self, gained: u32) {
         self.exp += gained;
-        if self.exp >= self.exp_required {
+        while self.exp >= self.exp_required {
             self.level += 1;
             self.stats += self.levelup_stats;
             self.exp -= self.exp_required;
