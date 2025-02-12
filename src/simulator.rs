@@ -34,7 +34,7 @@ impl Simulator {
                     None => {}, Some(v) => {
                         let buffs = v.buffs.clone();
                         for (kind, amount) in buffs {
-                            kind.round_end(v, amount);
+                            kind.round_end(&mut board, i, amount);
                         }
                     }
                 }

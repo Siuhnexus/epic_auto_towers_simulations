@@ -1,4 +1,4 @@
-use crate::{stats::Stats, tower::Tower};
+use crate::{board::Board, stats::Stats};
 
 #[derive(Hash, Clone, PartialEq, Eq, Debug)]
 pub enum Buffs {
@@ -6,11 +6,11 @@ pub enum Buffs {
 }
 
 impl Buffs {
-    pub fn round_end(&self, parent: &mut Tower, amount: u32) {
+    pub fn round_end(&self, board: &mut Board, index: usize, amount: u32) {
         match self {
             Buffs::Chakra => {
-                parent.add_exp(amount);
-                parent.stats += Stats::new(2.0, 3.0) * amount;
+                board.add_exp(index, amount);
+                board.add_stats(index, Stats::new(2.0, 3.0) * amount);
             }
         }
     }
