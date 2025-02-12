@@ -2,6 +2,3 @@
 name = "epic_auto_towers_simulations"
 version = "0.1.0"
 edition = "2021"
-
-[dependencies]
-dyn-clone = "1.0.18"
