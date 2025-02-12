@@ -1,4 +1,4 @@
-use crate::{board::Board, buffs::Buffs, relics::Relic, stats::Stats, strategy::Strategy, tower::{Tower, TowerType}};
+use crate::{board::Board, buffs::Buffs, relics::Relic, stats::Stats, strategy::Strategy, tower::Tower, tower_type::TowerType};
 
 pub struct SpiritFlowerSwitch {
     pub round: u32

@@ -1,4 +1,4 @@
-use crate::{board::Board, buffs::Buffs, strategy::Strategy, tower::{Tower, TowerType}};
+use crate::{board::Board, buffs::Buffs, strategy::Strategy, tower::Tower, tower_type::TowerType};
 
 pub struct SpiritMaxLevel {}
 impl Strategy for SpiritMaxLevel {

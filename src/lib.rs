@@ -1,5 +1,6 @@
 pub mod stats;
 pub mod tower;
+pub mod tower_type;
 pub mod towers;
 pub mod buffs;
 pub mod relics;
