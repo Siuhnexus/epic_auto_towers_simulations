@@ -1,4 +1,4 @@
-use crate::{board::Board, strategy::Strategy};
+use crate::{board::Board, stats::Stats, strategy::Strategy};
 
 pub struct Simulator {}
 
@@ -7,20 +7,19 @@ impl Simulator {
         Simulator {}
     }
 
-    pub fn simulate(self, strategy: impl Strategy) {
-        let mut gold = 0;
+    pub fn simulate(&self, strategy: impl Strategy) {
         let mut round = 1;
         let mut board = Board::new();
 
-        strategy.init(&mut board, &mut gold, &mut round);
+        strategy.init(&mut board, &mut round);
 
         let ending_round = strategy.last_round();
 
-        println!("{}", strategy.log_init());
-        println!("{}", strategy.log(&board, gold, round));
+        //println!("{}", strategy.log_init());
+        //println!("{}", strategy.log(&board, round));
         while round <= ending_round {
             // Action phase
-            strategy.round_actions(&mut board, &mut gold);
+            strategy.round_actions(&mut board, round);
             // Round end
             for i in 0..15 {
                 match board.get_tower(i) {
@@ -53,12 +52,14 @@ impl Simulator {
             for i in 0..15 {
                 match board.get_tower(i) {
                     None => {}, Some(v) => {
+                        v.temp_stats = Stats::new(0.0, 0.0);
                         let kind = v.kind.clone();
                         kind.round_start(&mut board, i);
                     }
                 }
             }
-            println!("{}", strategy.log(&board, gold, round));
+            //println!("{}", strategy.log(&board, round));
         }
+        println!("{}", strategy.log(&board, round));
     }
 }

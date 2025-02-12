@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{board::Board, buffs::Buffs, stats::Stats, towers::spirit::Spirit};
+use crate::{board::Board, buffs::Buffs, stats::Stats, towers::{flower::Flower, honey::Honey, obsidian::Obsidian, spirit::Spirit}};
 
 #[derive(Clone, Debug)]
 pub struct Tower {
@@ -71,11 +71,17 @@ impl TowerType {
     }
 
     pub fn round_end(&self, board: &mut Board, index: usize) {
-        
+        match self {
+            TowerType::Flower => Flower::round_end(board, index),
+            _ => {}
+        }
     }
 
     pub fn round_end_self_destruct(&self, board: &mut Board, index: usize) {
-        
+        match self {
+            TowerType::Honey => Honey::round_end_self_destruct(board, index),
+            _ => {}
+        }
     }
 
     pub fn use_ability(&self, board: &mut Board, index: usize, on: usize) {
@@ -86,11 +92,17 @@ impl TowerType {
     }
 
     pub fn on_receive_exp(&self, amount: u32, gold: &mut u32) {
-
+        match self {
+            TowerType::Flower => Flower::on_receive_exp(amount, gold),
+            _ => {}
+        }
     }
 
-    pub fn on_receive_temp_stats(&self, board: &mut Board, index: usize, stats: Stats) {
-
+    pub fn on_receive_temp_stats(&self, board: &mut Board, index: usize) {
+        match self {
+            TowerType::Obsidian => Obsidian::on_receive_temp_stats(board, index),
+            _ => {}
+        }
     }
 }
 

@@ -49,6 +49,7 @@ impl Board {
     }
 
     pub fn add_temp_stats(&mut self, index: usize, mut stats: Stats) {
+        let mut to_trigger = None;
         if let Some(v) = self.towers.get_mut(index) {
             if let Some(v) = v.as_mut() {
                 for (relic, amount) in &self.relics {
@@ -57,7 +58,11 @@ impl Board {
                     }
                 }
                 v.temp_stats += stats;
+                to_trigger = Some(v.kind.clone());
             }
+        }
+        if let Some(kind) = to_trigger {
+            kind.on_receive_temp_stats(self, index);
         }
     }
 }

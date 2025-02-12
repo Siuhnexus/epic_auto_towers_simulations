@@ -1,8 +1,6 @@
 use crate::{board::Board, buffs::Buffs};
 
-#[derive(Clone, Debug)]
 pub struct Spirit {}
-
 impl Spirit {
     pub fn init(board: &mut Board, index: usize) {
         board.add_exp(index, 6);
