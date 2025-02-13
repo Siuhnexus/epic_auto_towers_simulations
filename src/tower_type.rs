@@ -1,16 +1,17 @@
-use crate::{board::Board, stats::Stats, towers::{flower::Flower, honey::Honey, obsidian::Obsidian, spirit::Spirit}};
+use crate::{board::Board, stats::Stats, towers::{flower::Flower, honey::Honey, obsidian::Obsidian, princess::Princess, spirit::Spirit}};
 
 #[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub enum TowerType {
     Spirit,
     Flower,
     Honey,
-    Obsidian
+    Obsidian,
+    Princess
 }
 impl TowerType {
     pub fn rarity(&self) -> TowerRarity {
         match self {
-            TowerType::Spirit => TowerRarity::Rare,
+            TowerType::Spirit | TowerType::Princess => TowerRarity::Rare,
             TowerType::Flower | TowerType::Obsidian => TowerRarity::Uncommon,
             TowerType::Honey => TowerRarity::Common
         }
@@ -21,7 +22,8 @@ impl TowerType {
             TowerType::Spirit => Stats::new(50.0, 50.0),
             TowerType::Flower => Stats::new(5.0, 5.0),
             TowerType::Obsidian => Stats::new(3.0, 3.0),
-            TowerType::Honey => Stats::new(1.0, 2.0)
+            TowerType::Honey => Stats::new(1.0, 2.0),
+            TowerType::Princess => Stats::new(3.0, 3.0)
         }
     }
 
@@ -35,6 +37,7 @@ impl TowerType {
     pub fn round_start(&self, board: &mut Board, index: usize) {
         match self {
             TowerType::Spirit => Spirit::round_start(board, index),
+            TowerType::Princess => Princess::round_start(board, index),
             _ => {}
         }
     }

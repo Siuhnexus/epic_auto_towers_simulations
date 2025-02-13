@@ -15,8 +15,8 @@ impl Simulator {
 
         let ending_round = strategy.last_round();
 
-        //println!("{}", strategy.log_init());
-        //println!("{}", strategy.log(&board, round));
+        println!("{}", strategy.log_init());
+        println!("{}", strategy.log(&board, round));
         while round <= ending_round {
             // Action phase
             strategy.round_actions(&mut board, round);
@@ -58,8 +58,7 @@ impl Simulator {
                     }
                 }
             }
-            //println!("{}", strategy.log(&board, round));
+            println!("{}", strategy.log(&board, round));
         }
-        println!("{}", strategy.log(&board, round));
     }
 }
