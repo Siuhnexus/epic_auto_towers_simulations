@@ -1,4 +1,4 @@
-use crate::{board::Board, buffs::Buffs, relics::Relic, stats::Stats, strategy::Strategy, tower::Tower, tower_type::TowerType};
+use crate::{board::Board, buffs::Buffs, csv_line, logger::CSVLogger, relics::Relic, stats::Stats, strategy::Strategy, tower::Tower, tower_type::TowerType};
 
 pub struct SpiritObsidianSwitch {
     pub round: u32
@@ -38,18 +38,18 @@ impl Strategy for SpiritObsidianSwitch {
         }
     }
 
-    fn log_init(&self) -> String {
-        format!("Round,Level,Attack,Life,EXP,Levelup_EXP,Chakra")
+    fn log_init(&self, logger: &mut CSVLogger) {
+        csv_line!(logger, "Round", "Level", "Attack", "Life", "EXP", "Levelup_EXP", "Chakra");
     }
 
-    fn log(&self, board: &crate::board::Board, round: u32) -> String {
+    fn log(&self, logger: &mut CSVLogger, board: &crate::board::Board, round: u32) {
         let tower = board.towers[1].as_ref().unwrap();
-        format!("{},{},{},{},{},{},{}", round, tower.level, tower.stats.attack, tower.stats.life, tower.exp, tower.exp_required, match tower.buffs.get(&Buffs::Chakra) {
+        csv_line!(logger, round, tower.level, tower.stats.attack, tower.stats.life, tower.exp, tower.exp_required, match tower.buffs.get(&Buffs::Chakra) {
             None => 0, Some(v) => *v
         })
     }
 
     fn last_round(&self) -> u32 {
-        68
+        73
     }
 }

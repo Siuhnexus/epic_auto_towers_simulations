@@ -3,3 +3,4 @@ pub mod flower;
 pub mod honey;
 pub mod obsidian;
 pub mod princess;
+pub mod ladder;

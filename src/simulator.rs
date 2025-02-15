@@ -1,13 +1,49 @@
-use crate::{board::Board, stats::Stats, strategy::Strategy};
+use crate::{board::Board, logger::CSVLogger, stats::Stats, strategy::Strategy};
 
-pub struct Simulator {}
+#[derive(Clone, PartialEq, Eq)]
+pub enum LoggingStrategy {
+    WholeRun,
+    JustResults,
+    RunWithMetaValue(u32)
+}
+
+impl LoggingStrategy {
+    pub fn before_run(&self, logger: &mut CSVLogger, strategy: &impl Strategy) {
+        if *self == LoggingStrategy::WholeRun {
+            strategy.log_init(logger);
+        }
+    }
+    pub fn log_round(&self, logger: &mut CSVLogger, strategy: &impl Strategy, board: &Board, round: u32) {
+        match *self {
+            LoggingStrategy::RunWithMetaValue(meta) => {
+                logger.write(format!("{},", meta));
+            },
+            LoggingStrategy::JustResults => return,
+            _ => {}
+        }
+        strategy.log(logger, board, round);
+    }
+    pub fn log_end(&self, logger: &mut CSVLogger, strategy: &impl Strategy, board: &Board, round: u32) {
+        match *self {
+            LoggingStrategy::RunWithMetaValue(meta) => {
+                logger.write(format!("{},", meta));
+            },
+            _ => {}
+        }
+        strategy.log(logger, board, round);
+    }
+}
+
+pub struct Simulator {
+    pub logging: LoggingStrategy
+}
 
 impl Simulator {
-    pub fn new() -> Simulator {
-        Simulator {}
+    pub fn new(logging: LoggingStrategy) -> Simulator {
+        Simulator { logging }
     }
 
-    pub fn simulate(&self, strategy: impl Strategy) {
+    pub fn simulate(&self, logger: &mut CSVLogger, strategy: &impl Strategy) {
         let mut round = 1;
         let mut board = Board::new();
 
@@ -15,8 +51,8 @@ impl Simulator {
 
         let ending_round = strategy.last_round();
 
-        println!("{}", strategy.log_init());
-        println!("{}", strategy.log(&board, round));
+        self.logging.before_run(logger, strategy);
+        self.logging.log_round(logger, strategy, &board, round);
         while round <= ending_round {
             // Action phase
             strategy.round_actions(&mut board, round);
@@ -58,7 +94,12 @@ impl Simulator {
                     }
                 }
             }
-            println!("{}", strategy.log(&board, round));
+            if round > ending_round {
+                self.logging.log_end(logger, strategy, &board, round);
+            }
+            else {
+                self.logging.log_round(logger, strategy, &board, round);
+            }
         }
     }
 }

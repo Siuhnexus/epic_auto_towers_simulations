@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{buffs::Buffs, stats::Stats, tower_type::TowerType};
+use crate::{buffs::Buffs, stats::Stats, tower_type::{ReactingToLevelup, TowerType}, towers::ladder::Ladder};
 
 #[derive(Clone, Debug)]
 pub struct Tower {
@@ -27,6 +27,11 @@ impl Tower {
             self.stats += self.base_stats;
             self.exp -= self.exp_required;
             self.exp_required += 5;
+            match self.kind {
+                TowerType::Ladder => {
+                    Ladder::on_levelup(self);
+                }, _ => {}
+            }
         }
     }
 }

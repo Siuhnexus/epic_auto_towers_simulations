@@ -1,4 +1,4 @@
-use crate::{board::Board, buffs::Buffs, strategy::Strategy, tower::Tower, tower_type::TowerType};
+use crate::{board::Board, buffs::Buffs, csv_line, logger::CSVLogger, strategy::Strategy, tower::Tower, tower_type::TowerType};
 
 pub struct SpiritMaxLevel {}
 impl Strategy for SpiritMaxLevel {
@@ -21,12 +21,12 @@ impl Strategy for SpiritMaxLevel {
         106
     }
     
-    fn log_init(&self) -> String {
-        format!("Round,Level,Attack,Life,EXP,Levelup_EXP,Chakra")
+    fn log_init(&self, logger: &mut CSVLogger) {
+        csv_line!(logger, "Round", "Level", "Attack", "Life", "EXP", "Levelup_EXP", "Chakra");
     }
-    fn log(&self, board: &Board, round: u32) -> String {
+    fn log(&self, logger: &mut CSVLogger, board: &Board, round: u32) {
         let tower = board.towers[0].as_ref().unwrap();
-        format!("{},{},{},{},{},{},{}", round, tower.level, tower.stats.attack, tower.stats.life, tower.exp, tower.exp_required, match tower.buffs.get(&Buffs::Chakra) {
+        csv_line!(logger, round, tower.level, tower.stats.attack, tower.stats.life, tower.exp, tower.exp_required, match tower.buffs.get(&Buffs::Chakra) {
             None => 0, Some(v) => *v
         })
     }

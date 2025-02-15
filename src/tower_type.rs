@@ -1,4 +1,4 @@
-use crate::{board::Board, stats::Stats, towers::{flower::Flower, honey::Honey, obsidian::Obsidian, princess::Princess, spirit::Spirit}};
+use crate::{board::Board, stats::Stats, tower::Tower, towers::{flower::Flower, honey::Honey, ladder::Ladder, obsidian::Obsidian, princess::Princess, spirit::Spirit}};
 
 #[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub enum TowerType {
@@ -6,14 +6,15 @@ pub enum TowerType {
     Flower,
     Honey,
     Obsidian,
-    Princess
+    Princess,
+    Ladder
 }
 impl TowerType {
     pub fn rarity(&self) -> TowerRarity {
         match self {
             TowerType::Spirit | TowerType::Princess => TowerRarity::Rare,
             TowerType::Flower | TowerType::Obsidian => TowerRarity::Uncommon,
-            TowerType::Honey => TowerRarity::Common
+            TowerType::Honey | TowerType::Ladder => TowerRarity::Common
         }
     }
 
@@ -21,15 +22,15 @@ impl TowerType {
         match self {
             TowerType::Spirit => Stats::new(50.0, 50.0),
             TowerType::Flower => Stats::new(5.0, 5.0),
-            TowerType::Obsidian => Stats::new(3.0, 3.0),
-            TowerType::Honey => Stats::new(1.0, 2.0),
-            TowerType::Princess => Stats::new(3.0, 3.0)
+            TowerType::Obsidian | TowerType::Princess | TowerType::Ladder => Stats::new(3.0, 3.0),
+            TowerType::Honey => Stats::new(1.0, 2.0)
         }
     }
 
     pub fn init(&self, board: &mut Board, index: usize) {
         match self {
             TowerType::Spirit => Spirit::init(board, index),
+            TowerType::Ladder => Ladder::init(board, index),
             _ => {}
         }
     }
@@ -98,6 +99,9 @@ pub trait ReactingToEXP {
 }
 pub trait ReactingToTempStats {
     fn on_receive_temp_stats(board: &mut Board, index: usize);
+}
+pub trait ReactingToLevelup {
+    fn on_levelup(tower: &mut Tower);
 }
 
 #[derive(Clone, Hash, PartialEq, Eq)]
