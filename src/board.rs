@@ -19,6 +19,11 @@ impl Board {
             None => None, Some(v) => v.as_mut()
         }
     }
+    pub fn get_tower_ref(&self, index: usize) -> Option<&Tower> {
+        match self.towers.get(index) {
+            None => None, Some(v) => v.as_ref()
+        }
+    }
 
     pub fn set_tower(&mut self, index: usize, tower: Tower) {
         let kind= tower.kind.clone();

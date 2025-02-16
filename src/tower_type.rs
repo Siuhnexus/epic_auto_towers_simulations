@@ -1,4 +1,4 @@
-use crate::{board::Board, stats::Stats, tower::Tower, towers::{flower::Flower, honey::Honey, ladder::Ladder, obsidian::Obsidian, princess::Princess, spirit::Spirit}};
+use crate::{board::Board, stats::Stats, tower::Tower, towers::{debt::Debt, flower::Flower, honey::Honey, ladder::Ladder, obsidian::Obsidian, princess::Princess, spirit::Spirit}};
 
 #[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub enum TowerType {
@@ -7,14 +7,16 @@ pub enum TowerType {
     Honey,
     Obsidian,
     Princess,
-    Ladder
+    Ladder,
+    Debt
 }
 impl TowerType {
     pub fn rarity(&self) -> TowerRarity {
         match self {
             TowerType::Spirit | TowerType::Princess => TowerRarity::Rare,
             TowerType::Flower | TowerType::Obsidian => TowerRarity::Uncommon,
-            TowerType::Honey | TowerType::Ladder => TowerRarity::Common
+            TowerType::Honey | TowerType::Ladder => TowerRarity::Common,
+            TowerType::Debt => TowerRarity::Malicious
         }
     }
 
@@ -23,7 +25,8 @@ impl TowerType {
             TowerType::Spirit => Stats::new(50.0, 50.0),
             TowerType::Flower => Stats::new(5.0, 5.0),
             TowerType::Obsidian | TowerType::Princess | TowerType::Ladder => Stats::new(3.0, 3.0),
-            TowerType::Honey => Stats::new(1.0, 2.0)
+            TowerType::Honey => Stats::new(1.0, 2.0),
+            TowerType::Debt => Stats::new(1.0, 5.0)
         }
     }
 
@@ -31,6 +34,7 @@ impl TowerType {
         match self {
             TowerType::Spirit => Spirit::init(board, index),
             TowerType::Ladder => Ladder::init(board, index),
+            TowerType::Debt => Debt::init(board, index),
             _ => {}
         }
     }
@@ -39,6 +43,7 @@ impl TowerType {
         match self {
             TowerType::Spirit => Spirit::round_start(board, index),
             TowerType::Princess => Princess::round_start(board, index),
+            TowerType::Debt => Debt::round_start(board, index),
             _ => {}
         }
     }
@@ -108,5 +113,6 @@ pub trait ReactingToLevelup {
 pub enum TowerRarity {
     Common,
     Uncommon,
-    Rare
+    Rare,
+    Malicious
 }

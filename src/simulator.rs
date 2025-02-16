@@ -85,6 +85,7 @@ impl Simulator {
             }
             round += 1;
             // Round start
+            board.gold += 5;
             for i in 0..15 {
                 match board.get_tower(i) {
                     None => {}, Some(v) => {
